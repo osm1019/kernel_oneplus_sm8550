@@ -950,6 +950,7 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
 	struct mm_struct *mm;
 	struct vm_area_struct *vma;
 	unsigned long last_vma_end = 0;
+	unsigned long vma_start = 0;
 	int ret = 0;
 
 	priv->task = get_proc_task(priv->inode);
@@ -970,13 +971,12 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
 
 	hold_task_mempolicy(priv);
 
-	for (vma = priv->mm->mmap; vma;) {
-
-	if (unlikely(!vma))
+	if (unlikely(!priv->mm->mmap))
 		goto empty_set;
 
-	vma_start = vma->vm_start;
-	do {
+	vma_start = priv->mm->mmap->vm_start;
+
+	for (vma = priv->mm->mmap; vma;) {
 #ifdef CONFIG_KSU_SUSFS_SUS_MAP
 		if (vma->vm_file &&
 			unlikely(test_bit(AS_FLAGS_SUS_MAP, &file_inode(vma->vm_file)->i_mapping->flags) &&
@@ -1058,8 +1058,8 @@ bypass_orig_flow:
 		vma = vma->vm_next;
 	}
 
-	show_vma_header_prefix(m, priv->mm->mmap ? priv->mm->mmap->vm_start : 0,
-			       last_vma_end, 0, 0, 0, 0);
+empty_set:
+	show_vma_header_prefix(m, vma_start, last_vma_end, 0, 0, 0, 0);
 	seq_pad(m, ' ');
 	seq_puts(m, "[rollup]\n");
 

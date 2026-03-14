@@ -283,8 +283,6 @@ static int filldir(struct dir_context *ctx, const char *name, int namlen,
 
 		return -EINTR;
 
-		return false;
-
 #ifdef CONFIG_KSU_SUSFS_SUS_PATH
 	inode = ilookup(buf->sb, ino);
 	if (!inode) {
@@ -392,7 +390,6 @@ static int filldir64(struct dir_context *ctx, const char *name, int namlen,
 
 		return -EINTR;
 
-		return false;
 
 #ifdef CONFIG_KSU_SUSFS_SUS_PATH
 	inode = ilookup(buf->sb, ino);
@@ -613,7 +610,6 @@ static int compat_filldir(struct dir_context *ctx, const char *name, int namlen,
 
 		return -EINTR;
 
-		return false;
 #ifdef CONFIG_KSU_SUSFS_SUS_PATH
 	inode = ilookup(buf->sb, ino);
 	if (!inode) {

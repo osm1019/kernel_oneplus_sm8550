@@ -285,7 +285,6 @@ static struct mount *susfs_reuse_sus_vfsmnt(const char *name, int orig_mnt_id)
 		INIT_HLIST_NODE(&mnt->mnt_mp_list);
 		INIT_LIST_HEAD(&mnt->mnt_umounting);
 		INIT_HLIST_HEAD(&mnt->mnt_stuck_children);
-		mnt->mnt.mnt_idmap = &nop_mnt_idmap;
 	}
 	return mnt;
 
@@ -338,7 +337,6 @@ static struct mount *susfs_alloc_sus_vfsmnt(const char *name)
 		INIT_HLIST_NODE(&mnt->mnt_mp_list);
 		INIT_LIST_HEAD(&mnt->mnt_umounting);
 		INIT_HLIST_HEAD(&mnt->mnt_stuck_children);
-		mnt->mnt.mnt_idmap = &nop_mnt_idmap;
 	}
 	return mnt;
 

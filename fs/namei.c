@@ -1605,7 +1605,6 @@ static struct dentry *lookup_fast(struct nameidata *nd,
 
 		unsigned seq;
 		dentry = __d_lookup_rcu(parent, &nd->last, &seq);
-		dentry = __d_lookup_rcu(parent, &nd->last, &nd->next_seq);
 #ifdef CONFIG_KSU_SUSFS_SUS_PATH
 		mnt = nd->path.mnt;
 		if (is_nd_state_lookup_last_and_open_last && dentry && !IS_ERR(dentry) && dentry->d_inode &&
@@ -2301,7 +2300,6 @@ static int link_path_walk(const char *name, struct nameidata *nd)
 #ifdef CONFIG_KSU_SUSFS_SUS_PATH
 		struct dentry *dentry;
 #endif
-		struct mnt_idmap *idmap;
 		const char *link;
 		u64 hash_len;
 		int type;
@@ -2313,7 +2311,7 @@ static int link_path_walk(const char *name, struct nameidata *nd)
 
 #ifdef CONFIG_KSU_SUSFS_SUS_PATH
 		dentry = nd->path.dentry;
-		if (dentry->d_inode && susfs_is_inode_sus_path(idmap, dentry->d_inode)) {
+		if (dentry->d_inode && susfs_is_inode_sus_path(mnt_idmap(nd->path.mnt), dentry->d_inode)) {
 			// - No need to dput() here
 			// - return -ENOENT here since it is walking the sub path of sus path
 			return -ENOENT;
